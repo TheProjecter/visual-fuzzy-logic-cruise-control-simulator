@@ -93,7 +93,7 @@ void Car::update(const Ogre::Real timeSinceLastFrame)
     }
 	else 
 	{
-		//mVelocity -= Ogre::Math::Log(Simulation::smDeccelerationRate * (mVelocity) + 1.01);
+		mVelocity -= Ogre::Math::Log(Simulation::smDeccelerationRate * (mVelocity) + 1.01 + friction);
 	}
 
     // driving speed limits
