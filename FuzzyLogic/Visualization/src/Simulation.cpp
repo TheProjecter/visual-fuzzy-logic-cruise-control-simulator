@@ -284,14 +284,6 @@ bool Simulation::frameLogicUpdate(const Ogre::Real timeSinceLastFrame)
 					const Ogre::Real dist = playerPos.distance(carPos);
 					const Ogre::Vector3 nextPlayerPos = playerPos + (playerDest * dist);
 		
-					//Ogre::LogManager::getSingletonPtr()->logMessage( " " );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "p: " + Ogre::StringConverter::toString(playerDest) );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "c: " + Ogre::StringConverter::toString(carDest) );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "curplayerpos: " + Ogre::StringConverter::toString(playerPos) );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "nextplayerpos: " + Ogre::StringConverter::toString(nextPlayerPos) );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "curcarpos: " + Ogre::StringConverter::toString(carPos) );
-					//Ogre::LogManager::getSingletonPtr()->logMessage( "infrontdist: " + Ogre::StringConverter::toString(nextPlayerPos.distance(carPos)) );
-					
 					// if the car is in FRONT of us, consider it..
 					if (nextPlayerPos.distance(carPos) < 3.0)
 					{
@@ -315,12 +307,6 @@ bool Simulation::frameLogicUpdate(const Ogre::Real timeSinceLastFrame)
 				const Ogre::Real dist = playerCar.getSceneNode()->getPosition().distance(aheadCar->getSceneNode()->getPosition());
 				mDistance = dist / (playerCar.getVelocity() / 10.0 * 3.0);
 				mApproaching = playerCar.getVelocity() - aheadCar->getVelocity();
-
-				//Ogre::LogManager::getSingletonPtr()->logMessage( " " );
-				//Ogre::LogManager::getSingletonPtr()->logMessage( "ahead! " + Ogre::StringConverter::toString(dist) );
-				//Ogre::LogManager::getSingletonPtr()->logMessage( "varnrazdalja:" + Ogre::StringConverter::toString(Ogre::Real(playerCar.getVelocity() / 10.0 * 3.0)) );
-				//Ogre::LogManager::getSingletonPtr()->logMessage( "distance:" + Ogre::StringConverter::toString(playerCar.getSceneNode()->getPosition().distance(aheadCar->getSceneNode()->getPosition())) );
-				//Ogre::LogManager::getSingletonPtr()->logMessage( "veckratnik:" + Ogre::StringConverter::toString(mDistance) );
 			}
 			else if (playerCollision)
 			{
@@ -405,13 +391,14 @@ bool Simulation::frameRenderUpdate(const Ogre::Real timeSinceLastFrame)
     OgreAssert(mCars.size() > 0, "mCars size is 0!");
     Car * const playerCar = mCars.at(0);
 
-    const Ogre::Vector3 cameraPos = (Ogre::Vector3::UNIT_Y * (20.0 - playerCar->getVelocity() * 0.03)) + (Ogre::Vector3::UNIT_Z * (-40.0 + playerCar->getVelocity() * 0.01));
+    // Static camera
+    // mRenderer->getCamera()->setPosition(playerCarPos.x, mRenderer->getCamera()->getPosition().y, playerCarPos.z + 0.1);
+	// not-so-static camera
+    const Ogre::Vector3 cameraPos = (Ogre::Vector3::UNIT_Y * (40.0 - playerCar->getVelocity() * 0.3)) + (Ogre::Vector3::UNIT_Z * (-40.0 + playerCar->getVelocity() * 0.01));
     const Ogre::Vector3 playerCarPos = playerCar->getSceneNode()->getPosition();
     const Ogre::Quaternion playerCarQ = playerCar->getSceneNode()->getOrientation();
     mRenderer->getCamera()->setPosition(playerCarPos);
     mRenderer->getCamera()->move(playerCarQ * cameraPos);
-    // Static camera
-    // mRenderer->getCamera()->setPosition(playerCarPos.x, mRenderer->getCamera()->getPosition().y, playerCarPos.z + 0.1);
 
     // update GUI
     std::stringstream pointsSS; // NOTE: Ogre doesn't provide this in its StringConverter class!
